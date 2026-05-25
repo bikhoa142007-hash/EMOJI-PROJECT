@@ -9,7 +9,6 @@ import streamlit_drawable_canvas as drawable_canvas
 @st.cache_resource
 def load_trained_model():
     return tf.keras.models.load_model("emoji_dense_model.keras")
-
 model = load_trained_model()
 Emoji_name = [
     "Grinning Face",
