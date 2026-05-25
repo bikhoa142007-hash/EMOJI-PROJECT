@@ -2,5 +2,5 @@ streamlit==1.45.1
 streamlit-drawable-canvas==0.9.3
 numpy==1.26.4
 pandas==2.2.3
-Pillow==10.4.0
+Pillow==10.3.0
 keras
