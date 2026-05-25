@@ -1,3 +1,5 @@
+from keras.src.ops import Imag
+from keras.utils import img_to_array
 import streamlit as st
 import numpy as np
 import tensorflow as tf
@@ -64,8 +66,32 @@ def app():
         name = st.text_input("Tên của bạn")
         age = st.number_input("Tuổi của bạn", min_value=0, max_value=120)
         button = st.button("Dự đoán hình vẽ")
+        if button:
+            if canvas_result.image_data is not None and np.any(canvas_result.image_data[:, :, :3] < 255):
+                if model is not None:
+                    img_data = canvas_result.image_data
+                    img = Image.fromarray(img_data.astype('uint8'))
+                    img = img.convert('L')
+                    img = img.resize((32, 32))
+                    img_array = np.array(img)/ 255.0
+                    img_array = img_array.reshape(1, 1024)
+                    prediction = model.predict(img_array)
+                    predicted_class = np.argmax(prediction)
+                    if predicted_class < len(Emoji_name):
+                        st.session_state.prediction_result = Emoji_name[predicted_class]
+                    else:
+                        st.session_state.prediction_result = "Không xác định được emoji"
+                else:
+                    st.error("Model không được tải thành công")
+                st.session_state.user_info = {"Name": name, "Age": age}
+            else:
+                st.warning("Vui lòng vẽ gì đó trước khi dự đoán")
     with tab3:
         st.header("Kết quả")
-
+        if st.session_state.prediction_result and st.session_state.user_info:
+            st.write(f"**Xin chào:** {st.session_state.user_info['name']} ({st.session_state.user_info['age']} tuổi)")
+            st.metric(label="Emoji được dự đoán là:", value=st.session_state.prediction_result)
+        else:
+            st.info("Vui lòng nhập thông tin và nhấn 'Dự đoán hình vẽ' ở Tab 'Ô nhập người dùng'.")
 if __name__ == "__main__":
     app()
