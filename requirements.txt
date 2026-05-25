@@ -1,5 +1,6 @@
 streamlit
-os
-keras
+streamlit-drawable-canvas
+tensorflow
 numpy
 pandas
+Pillow
