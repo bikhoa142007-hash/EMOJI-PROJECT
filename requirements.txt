@@ -1,6 +1,6 @@
 streamlit
 streamlit-drawable-canvas
-tensorflow-cpu    
+tensorflow-cpu
 numpy
 pandas
 Pillow
