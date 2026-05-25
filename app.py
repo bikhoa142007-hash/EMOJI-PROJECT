@@ -66,6 +66,6 @@ def app():
         button = st.button("Dự đoán hình vẽ")
     with tab3:
         st.header("Kết quả")
-def main():
-    if __name__ == "__main__":
-        app()
+
+if __name__ == "__main__":
+    app()
