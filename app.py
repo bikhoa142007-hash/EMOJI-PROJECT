@@ -3,6 +3,8 @@ import numpy as np
 import keras
 from PIL import Image
 from streamlit_drawable_canvas import st_canvas
+from scipy.ndimage import binary_dilation
+from PIL import ImageFilter, ImageEnhance
 
 @st.cache_resource
 def load_trained_model():
@@ -75,9 +77,19 @@ def app():
                     img_data = canvas_result.image_data
                     img = Image.fromarray(img_data.astype('uint8'))
                     img = img.convert('RGB')
-                    img = img.resize((32, 32))
-                    img_array = np.array(img) / 255.0
-                    img_array = img_array.reshape(1, 3072)
+                    img_gray = img.convert('L')
+                    struct = [[1,1,1],[1,1,1],[1,1,1]]
+                    binary_img = np.array(img_gray) < 128
+                    dilated = binary_dilation(binary_img, structure=struct, iterations=2)
+                    img_gray = Image.fromarray((~dilated * 255).astype('uint8')) 
+                    img_gray = img_gray.filter(ImageFilter.SMOOTH)
+                    img_binary = img_gray.point(lambda x: 0 if x < 200 else 255, '1')
+                    img_binary = img_binary.convert('RGB')
+                    img_resized = img_binary.resize((32, 32), Image.Resampling.LANCZOS)
+                    enhancer = ImageEnhance.Contrast(img_resized)
+                    img_final = enhancer.enhance(2.0)  
+                    img_array = np.array(img_final) / 255.0
+                    img_array = img_array.reshape(1, 3072) 
                     prediction = model.predict(img_array)
                     predicted_class = np.argmax(prediction)
                     if predicted_class < len(Emoji_name):
