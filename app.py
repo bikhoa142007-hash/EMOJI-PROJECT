@@ -70,10 +70,10 @@ def app():
                 if model is not None:
                     img_data = canvas_result.image_data
                     img = Image.fromarray(img_data.astype('uint8'))
-                    img = img.convert('L')
+                    img = img.convert('RGB')
                     img = img.resize((32, 32))
                     img_array = np.array(img)/ 255.0
-                    img_array = img_array.reshape(1, 1024)
+                    img_array = img_array.reshape(1, 3072)
                     prediction = model.predict(img_array)
                     predicted_class = np.argmax(prediction)
                     if predicted_class < len(Emoji_name):
