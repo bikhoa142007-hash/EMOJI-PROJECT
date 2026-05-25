@@ -9,6 +9,7 @@ from keras.layers import Dense, Input, Dropout, BatchNormalization
 from keras.utils import to_categorical
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
+# Data proccesing
 def get_data(images_folder, file_csv, num_classes=30, variants_class=200):
     rows = []
     print("Đang lấy dữ liệu để train...")
@@ -45,12 +46,11 @@ def get_data(images_folder, file_csv, num_classes=30, variants_class=200):
         except Exception as e:
             print(f"Lỗi xử lý file {img_name}: {e}")
     if len(rows) == 0:
-        print("CẢNH BÁO: Không tìm thấy ảnh nào!")
+        print("Không tìm thấy ảnh nào!")
         return
     columns = ['label'] + [f"pixel_{idx}" for idx in range(32 * 32 * 3)]
     df = pd.DataFrame(rows, columns=columns)
     df.to_csv(file_csv, index=False)
-    print(f"Đã tạo xong file CSV với {len(rows)} dòng.")
 # Train model
 class EmojiModel():
     def __init__(self):
@@ -88,7 +88,7 @@ class EmojiModel():
             validation_split=0.1,
             callbacks=callbacks
         )
-
+# Input
 if __name__ == "__main__":
     emoji_folder = r"C:\Users\Khoa Bi\source\repos\EMOJI PROJECT\emoji"
     File_csv = r"C:\Users\Khoa Bi\source\repos\EMOJI PROJECT\file_csv.csv"
