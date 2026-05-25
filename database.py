@@ -65,14 +65,14 @@ class EmojiModel():
         self.model.fit(x_train, y_train, epochs=30, batch_size=64)
 # Main page
 if __name__ == "__main__":
-    emoji = "./emoji"
+    emoji_folder = "./emoji"      #
     File_csv = "file_csv.csv"
-    df = pd.read_csv("File_csv")
+    get_data(images_folder=emoji_folder, file_csv=File_csv, num_classes=30, variants_class=50)
+    df = pd.read_csv(File_csv) 
     y_train = df['label'].values
     x_train = df.drop(columns=['label']).values
-    x_train_scaled = x_train.astype('float32')/255.0
+    x_train_scaled = x_train.astype('float32') / 255.0
     y_train_scaled = to_categorical(y_train, num_classes=30)
     my_emoji = EmojiModel()
     my_emoji.train_model(x_train_scaled, y_train_scaled)
     my_emoji.model.save("emoji_dense_model.keras")
-
