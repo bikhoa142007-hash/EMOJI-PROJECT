@@ -55,7 +55,7 @@ def app():
         st.write("Đây là nơi bạn có thể vẽ hình ảnh của mình.")
         canvas_result = st_canvas(
             fill_color="rgba(255, 165, 0, 0.3)",
-            stroke_width=2,
+            stroke_width=15,
             stroke_color="#000000",
             background_color="#ffffff",
             height=400,
